@@ -18,7 +18,8 @@
 
 <h2>Contato</h2>
 <ul>
-    <li>LinkedIn: https://www.linkedin.com/in/marcus-vinicius-pinheiro-conduru/</li>
+    <li><a href="https://www.linkedin.com/in/marcus-vinicius-pinheiro-conduru/">LinkedIn</a> </li>
     <li>Email: marcus.conduru@gmail.com</li>
 </ul>
+
 
