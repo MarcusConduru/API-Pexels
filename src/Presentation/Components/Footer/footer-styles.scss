@@ -1,0 +1,14 @@
+@import '../../../Globals/colors.scss';
+
+.Footer {
+  &__content {
+    background-color: $white;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  &__text {
+    font-size: 1.6rem;
+  }
+}
