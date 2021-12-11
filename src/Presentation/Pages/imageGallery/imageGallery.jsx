@@ -1,30 +1,38 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from 'react'
 import './imageGallery-styles.scss'
-import { Footer, Header } from '../../Components'
-import { getGalleryImage,getGalleryImageSearch,getGalleryImageDetail } from '../../../Services/events'
 import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min'
+import { Footer, Header, Loading, LoadingPulse,ErrorMessage,Context } from '../../Components'
+import { getGalleryImage, getGalleryImageSearch } from '../../../Services/events'
+import { FaFrown } from "react-icons/fa"
 
 const ImageGallery = () => {
   const [imageGallery, setImageGallery] = useState([]);
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [perPage,setPerPage] = useState(15)
+  const [isLoadingObserver, setIsLoadingObserver] = useState(false);
+  const [perPage,setPerPage] = useState(0)
   const history = useHistory()
-  const location = useLocation()
+  const { pathname } = useLocation()
 
   useEffect(() => {
-    getGalleryImage(perPage).then(response => {
-      setImageGallery(response)  
-      setIsLoading(true)
-    }).catch(error => {
-      setError(error.message)
-    })
-  },[])
+    (async () => {
+      try {
+        const response = pathname.split('/')[1].length ? await getGalleryImageSearch(perPage, pathname.split('/')[1]) : await getGalleryImage(perPage)
+        setImageGallery(response)  
+        setIsLoading(true)
+        setIsLoadingObserver(false) 
+      } catch (error) {
+        setError(error.message)
+      }
+    })()
+  },[perPage,pathname])
 
   useEffect(() => {
     const intersectionObserver = new IntersectionObserver((entry) => {
       if(entry.some(entries => entries.isIntersecting)) {
-        setPerPage((PerPageElement) => PerPageElement + 15)
+        setPerPage((PerPageElement) => PerPageElement + 20)
+        setIsLoadingObserver(true)
       }
     })
 
@@ -33,37 +41,51 @@ const ImageGallery = () => {
     return () => intersectionObserver.disconnect()
   },[])
 
-  const handleSeachImage = () => {
+  const handleMoveDetailedImage = (name) => {
     history.push({
-      pathname: 's'
+      pathname: `/imagem/${name}`,
     })
   }
 
   return (
     <div className='Gallery__container'>
-      <Header />
+      <Context.Provider value={{ setIsLoading,setPerPage }}>
+        <Header />
+      </Context.Provider>
       <section className='Gallery__content'>
-        {Array(17).fill().map((el,index) => (
-          <div key={index} className='Gallery__box'>
-            <img 
-              srcset="
-                https://images.unsplash.com/photo-1609058745811-2e87ab15790a?w=800 800w,
-                https://images.unsplash.com/photo-1608749333098-a72487cff005?w=1000 1000w,
-                https://images.unsplash.com/photo-1601758176559-76c75ead317a?w=1250 1250w,
-                https://images.unsplash.com/photo-1609017879390-e1968a80ec6e?w=1500 1500w,
-                https://images.unsplash.com/photo-1609027910482-839beaea931e?w=1750 1750w,
-                https://images.unsplash.com/photo-1609008804635-571054f8d863?w=2000 2000w"
-              className='Gallery__img' 
-            />
-            <div className='Gallery__photographer'>
-              <p className='Gallery__title'>Fotogrado por:</p>
-              <p className='Gallery__name'>jose lima de dois</p>
-            </div>
-          </div>
-        ))}
-      </section>
-      <Footer />
+        {isLoading ? 
+          imageGallery.photos.length ?
+            imageGallery.photos.map((el) => (
+              <div key={el.id} className='Gallery__box' onClick={() => handleMoveDetailedImage(el.url.split('/')[4])}>
+                <img 
+                  src={el.src.landscape}
+                  srcSet={`
+                    ${el.src.landscape} 1200w,
+                    ${el.src.large} 940w,
+                    ${el.src.portrait} 800w,
+                    ${el.src.tiny} 280w,
+                  `}
+                  className='Gallery__img' 
+                />
+                <div className='Gallery__photographer'>
+                  <p className='Gallery__title'>Fotogrado por:</p>
+                  <p className='Gallery__name'>{el.photographer}</p>
+                </div>
+              </div>
+            )) : 
+            <div className='Gallery__empty'>
+              <FaFrown className='Gallery__icon' />
+              <p className='Gallery__text'>Nenhuma Imagem Encontrada</p>
+            </div> :
+          error ? 
+            <ErrorMessage error={error} />
+          : 
+          <LoadingPulse />
+        }
       <div id='observer' />
+      </section>
+      {isLoading && isLoadingObserver &&  <Loading />}
+      <Footer />
     </div>
   )
 }
