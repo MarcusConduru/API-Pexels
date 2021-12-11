@@ -1,0 +1,13 @@
+@import '../../../Globals/colors.scss';
+@import '../../../Globals/mixin.scss';
+
+.Message {
+  &__error {
+    color: $white;
+    font-size: 2.2rem;
+  }
+
+  &__fail {
+    @include center;
+  }
+}
