@@ -1,2 +1,6 @@
 export { default as Header } from './Header/header'
 export { default as Footer } from './Footer/footer'
+export { default as Loading } from './Loading/loading'
+export { default as LoadingPulse } from './LoadingPulse/loadingPulse'
+export { default as ErrorMessage } from './ErrorMessage/errorMessage'
+export { default as Context } from './Context/context'
