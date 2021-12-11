@@ -9,7 +9,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 2rem 0;
-    position: fixed;
+    position: sticky;
+    top: 0;
+    left: 0;
     z-index: 200;
   }
 
@@ -18,6 +20,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @include media(41em) {
+      &:nth-child(3) {
+        display: none;
+      }
+     }
   }
 
   &__image {
@@ -63,17 +71,13 @@
     padding: .5rem;
   }
 
-  &__link {
+  &__link, &__link--options {
     &:visited,&:link {
       text-decoration: none;
       color: $white;
       font-size: 2rem;
       margin-right: 2rem;
       position: relative;
-
-      @include media(29em) {
-        font-size: 1.6rem;
-      }
 
       &::before {
         content: '';
@@ -85,6 +89,10 @@
         background-color: $white;
         position: absolute;
         transition: all .3s;
+
+        @include media(41em) { 
+          background-color: transparent;
+        }
       }
     }
 
@@ -93,9 +101,98 @@
     }
   }
 
+  &__link--options {
+    &:visited,&:link {
+      @include media(41em) {
+        font-size: 3rem;
+        width: 10rem;
+        margin-right: 0;
+        background-image: linear-gradient(120deg, transparent 50% , $white 50% );
+        background-size: 30rem;
+        transition: all .5s;
+        text-align: center;
+        padding: 1rem;
+
+        &:hover {
+          background-position: 100%;
+          color: $black;
+        }
+
+        &:not(:last-child) {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+
   &__icon {
     width: 1.5rem;
     height: 1.5rem;
+  }
+
+  &__options {
+    visibility: hidden;
+    opacity: 0;
+    cursor: pointer;
+
+    @include media(41em) {
+      visibility: visible;
+      opacity: 1;
+      margin-right: 2rem;
+    }
+  }
+
+  &__icon--options {
+    height: 3rem;
+    width: 3rem;
+    color: $white;
+  }
+
+  &__box--options { 
+    display: none;
+    @include media(41em) {
+      flex-direction: column;
+      position: fixed;
+      background-color: $color-grey-dark-3;
+      top: 0;
+      left: 0;
+      z-index: 2000;
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all .3s;
+    }
+  }
+  
+  &__close {
+    display: none;
+    @include media(41em) {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 2rem;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  &__icon--close {
+    color: $white;
+    font-size: 4rem;
+    transition: all .2s;
+
+    &:hover {
+      color: $color-grey-dark-2;
+    }
   }
 
 }
