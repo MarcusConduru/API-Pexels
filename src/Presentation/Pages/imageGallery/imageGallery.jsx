@@ -5,6 +5,7 @@ import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.m
 import { Footer, Header, Loading, LoadingPulse,ErrorMessage,Context } from '../../Components'
 import { getGalleryImage, getGalleryImageSearch } from '../../../Services/events'
 import { FaFrown } from "react-icons/fa"
+import Zoom from 'react-reveal/Zoom'; 
 
 const ImageGallery = () => {
   const [imageGallery, setImageGallery] = useState([]);
@@ -56,22 +57,25 @@ const ImageGallery = () => {
         {isLoading ? 
           imageGallery.photos.length ?
             imageGallery.photos.map((el) => (
-              <div key={el.id} className='Gallery__box' onClick={() => handleMoveDetailedImage(el.url.split('/')[4])}>
-                <img 
-                  src={el.src.landscape}
-                  srcSet={`
-                    ${el.src.landscape} 1200w,
-                    ${el.src.large} 940w,
-                    ${el.src.portrait} 800w,
-                    ${el.src.tiny} 280w,
-                  `}
-                  className='Gallery__img' 
-                />
-                <div className='Gallery__photographer'>
-                  <p className='Gallery__title'>Fotogrado por:</p>
-                  <p className='Gallery__name'>{el.photographer}</p>
+              <Zoom>
+                <div key={el.id} className='Gallery__box' onClick={() => handleMoveDetailedImage(el.url.split('/')[4])}>
+                  <img 
+                    loading="lazy"
+                    src={el.src.landscape}
+                    srcSet={`
+                      ${el.src.landscape} 1200w,
+                      ${el.src.large} 940w,
+                      ${el.src.portrait} 800w,
+                      ${el.src.tiny} 280w,
+                    `}
+                    className='Gallery__img' 
+                  />
+                  <div className='Gallery__photographer'>
+                    <p className='Gallery__title'>Fotogrado por:</p>
+                    <p className='Gallery__name'>{el.photographer}</p>
+                  </div>
                 </div>
-              </div>
+              </Zoom>
             )) : 
             <div className='Gallery__empty'>
               <FaFrown className='Gallery__icon' />
