@@ -13,7 +13,7 @@ const ImageGalleryDetail = () => {
   const [error,setError] = useState()
   const [PerPage,setPerPage] = useState()
   const [imageDetail,setImageDetail] = useState()
-
+  
   useEffect(() => {
     getGalleryImageDetail(ParamsTitle[ParamsTitle.length - 1]).then(response => {
       setImageDetail(response)
