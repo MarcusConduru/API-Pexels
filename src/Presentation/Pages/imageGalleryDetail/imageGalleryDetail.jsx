@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min'
-import { Header, Footer, Context } from '../../Components'
+import { Header, Footer, Context, ErrorMessage, LoadingPulse } from '../../Components'
 import { getGalleryImageDetail } from '../../../Services/events'
 import './imageGalleryDetail-styles.scss'
 
@@ -49,7 +49,9 @@ const ImageGalleryDetail = () => {
             <p className='Detail__text'>Cor:<span className='Detail__color' style={{ backgroundColor: imageDetail.avg_color }} /></p>
           </div>
         </section> :
-        <div></div>
+        error ? 
+          <ErrorMessage error={error} /> : 
+          <LoadingPulse />
       }
       <Footer />
     </div>
