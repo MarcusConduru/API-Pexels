@@ -1,13 +1,15 @@
 /* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom/cjs/react-router-dom.min'
+import { useParams } from 'react-router-dom'
 import { Header, Footer, Context, ErrorMessage, LoadingPulse } from '../../Components'
 import { getGalleryImageDetail } from '../../../Services/events'
 import './imageGalleryDetail-styles.scss'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 const ImageGalleryDetail = () => {
   const { title } = useParams()
+  const history = useHistory()
   const ParamsTitle = title.split('-')
   const [IsLoading,setIsLoading] = useState(false)
   const [error,setError] = useState()
@@ -16,6 +18,8 @@ const ImageGalleryDetail = () => {
   
   useEffect(() => {
     getGalleryImageDetail(ParamsTitle[ParamsTitle.length - 1]).then(response => {
+      const titleReal = response.alt.toLowerCase().replaceAll(' ', '-') + '-' + response.id
+      !(titleReal === title) && history.replace({ pathname: titleReal})
       setImageDetail(response)
       setIsLoading(true)
     }).catch(error => {
@@ -31,6 +35,8 @@ const ImageGalleryDetail = () => {
       {IsLoading ? 
         <section className='Detail__content'>
           <img 
+            alt={imageDetail.alt}
+            title={imageDetail.alt}
             src={imageDetail.src.landscape}
             srcSet={`
               ${imageDetail.src.landscape} 1200w,

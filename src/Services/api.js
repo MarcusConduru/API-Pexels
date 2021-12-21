@@ -6,4 +6,5 @@ const api = axios.create({
     authorization: 'API KEY'
   }
 })
+
 export default api

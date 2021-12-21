@@ -13,16 +13,13 @@ const errorDeal = response => {
 }
 
 export const getGalleryImage = async (per_page) => {
-  const response = await getMethod('curated', { params: { per_page: per_page} })
-  return errorDeal(response)
+  return errorDeal(await getMethod('curated', { params: { per_page: per_page} }))
 }
 
 export const getGalleryImageDetail = async (id) => {
-  const response = await getMethod(`photos/${id}`)
-  return errorDeal(response)
+  return errorDeal(await getMethod(`photos/${id}`))
 }
 
 export const getGalleryImageSearch = async (per_page,queryParams) => {
-  const response = await getMethod(`search`, { params: { per_page: per_page,  query: queryParams } })
-  return errorDeal(response)
+  return errorDeal(await getMethod(`search`, { params: { per_page: per_page,  query: queryParams } }))
 }
